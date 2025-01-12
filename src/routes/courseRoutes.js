@@ -9,7 +9,7 @@ const courseController = require('../controllers/courseController');
 
 // Routes pour les cours
 router.post('/', courseController.createCourse);
-router.get('/:id', courseController.getCourse);
-router.get('/stats', courseController.getCourseStats);
+router.get('/:id', courseController.getCourse); // Compréhesion: Il faut créer les deux fonction getCourse et getCourseStats dans courseController.js
+router.get('/stats', courseController.getCourseStats); 
 
 module.exports = router;
