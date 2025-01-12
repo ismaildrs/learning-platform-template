@@ -60,5 +60,6 @@ module.exports = {
   mongoClient,
   connectMongo,
   redisClient,
-  connectRedis
+  connectRedis,
+  db
 };
