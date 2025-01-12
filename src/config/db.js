@@ -18,37 +18,47 @@ let mongoClient, redisClient, db;
 async function connectMongo() {
   // TODO: Implémenter la connexion MongoDB
   // Gérer les erreurs et les retries
-  try{
-    mongoClient = new MongoClient(config.mongodb);
-    await mongoClient.connect();
-  } catch(e){
-    throw new Error(console.error('Erreur Mongo :', e.message));
-  }
-    
+  const maxRetries = 3;
+  let nbRetries = 0;
+
+  while(nbRetries<maxRetries){
+    try{
+      mongoClient = new MongoClient(config.mongodb, );
+      await mongoClient.connect();
+      db = mongoClient.db(config.mongodb.dbName);
+    } catch(e){
+      nbRetries++;
+      if(nbRetries>=maxRetries) throw new Error(console.error('Erreur Mongo :', e.message));
+      await new Promise(res => setTimeout(res, 2000)); // Attendre un peu avant de réessayer
+    }
+  } 
 }
 
 async function connectRedis() {
   // TODO: Implémenter la connexion Redis
   // Gérer les erreurs et les retries
-  try{
-    redisClient = redis.createClient({
-      url: config.redis.uri,
-    });
-    await redisClient.connect();
-  } catch(e){
-    throw new Error(console.error('Erreur Redis :', e.message));
+  const maxRetries = 3;
+  let nbRetries = 0;
+
+  while(nbRetries<maxRetries){
+    try{
+      redisClient = redis.createClient({
+        url: config.redis.uri,
+      });
+      await redisClient.connect();
+    } catch(e){
+      nbRetries++;
+      if(nbRetries>= maxRetries) throw new Error(console.error('Erreur Redis :', e.message));
+      await new Promise(res => setTimeout(res, 2000)); // Attendre un peu avant de réessayer
+    }
   }
 }
 
 // Export des fonctions et clients
 module.exports = {
   // TODO: Exporter les clients et fonctions utiles
-  mongo:{
-    mongoClient,
-    connectMongo
-  },
-  redis:{
-    redisClient,
-    connectRedis
-  }
+  mongoClient,
+  connectMongo,
+  redisClient,
+  connectRedis
 };
