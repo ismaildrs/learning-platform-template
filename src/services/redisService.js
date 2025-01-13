@@ -13,11 +13,12 @@
 // - Inclure des identifiants uniques pour chaque entité (ex: "order:20230112:items").
 // - Configurer un TTL pour les données temporaires.
 
-const {redisClient} = require("../config/db"); 
+const {getRedisClient} = require("../config/db"); 
 
 // Fonctions utilitaires pour Redis
 async function cacheData(key, data, ttl) {
   // TODO: Implémenter une fonction générique de cache
+  const redisClient = getRedisClient(); 
   try{
     await redisClient.hSet(key, JSON.stringify(data), "EX", ttl);
 
@@ -27,6 +28,7 @@ async function cacheData(key, data, ttl) {
 }
 
 async function getCache(key){
+  const redisClient = getRedisClient(); 
   try{
     const cacheData = await redisClient.get(key);
     return cacheData;
@@ -36,8 +38,9 @@ async function getCache(key){
 }
 
 async function removeCache(key) {
+  const redisClient = getRedisClient(); 
   try {
-      await redis.del(key);
+      await redisClient.del(key);
   } catch (err) {
       return null;
   }

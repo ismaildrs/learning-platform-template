@@ -5,10 +5,11 @@
 // Cela rend également les tests plus simples et améliore la modularité de l'application.
 
 const { ObjectId } = require('mongodb');
-const { db } = require("../config/db");
+const { getDb } = require("../config/db");
 
 // Fonctions utilitaires pour MongoDB
 async function findOneById(collection, id) {
+    db = getDb();
     try {
         // Valider que l'ID est valide
         if (!ObjectId.isValid(id)) {
@@ -30,6 +31,7 @@ async function findOneById(collection, id) {
 }
 
 async function findAll(collection) {
+    db = getDb();
     try {
         const result = await db.collection(collection).find().toArray();
         return result;
@@ -38,9 +40,10 @@ async function findAll(collection) {
     }
 }
 
-async function insertOne(collection, document) {
+async function insertOne(collectionName, document) {
+    db = getDb();
     try {
-        const result = await db.collection(collection).insertOne(document);
+        const result = await db.collection(collectionName).insertOne(document);
         return result;
     } catch (e) {
         throw new Error(`Erreur lors de l'insertion du document : ${e.message}`);
@@ -48,6 +51,7 @@ async function insertOne(collection, document) {
 }
 
 async function deleteOneById(collection, id) {
+    db = getDb();
     try {
         // Valider que l'ID est valide
         if (!ObjectId.isValid(id)) {
@@ -66,6 +70,7 @@ async function deleteOneById(collection, id) {
 }
 
 async function updateOneById(collection, id, updatedDocument) {
+    db = getDb();
     try {
         // Valider que l'ID est valide
         if (!ObjectId.isValid(id)) {
