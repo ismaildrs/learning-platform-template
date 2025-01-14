@@ -1,13 +1,15 @@
-// Question: Pourquoi séparer les routes dans différents fichiers ?
-// Réponse : 
-// Question : Comment organiser les routes de manière cohérente ?
-// Réponse: 
+// Question: Pourquoi séparer les routes dans différents fichiers ?  
+// Réponse : Pour améliorer la lisibilité, faciliter la maintenance et structurer le code selon les fonctionnalités.  
+
+// Question : Comment organiser les routes de manière cohérente ?  
+// Réponse : Grouper les routes par fonctionnalités ou modules et suivre une convention de nommage claire.  
+
 
 const express = require('express');
 const router = express.Router();
 const courseController = require('../controllers/courseController');
 
-
+// Documentation Swagger
 /**
  * @swagger
  * /courses:

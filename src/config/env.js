@@ -10,35 +10,38 @@
 // entraînant ainsi des pannes ou des comportements erratiques. Une validation préalable détecte et corrige ce type de problème rapidement.
 
 const dotenv = require('dotenv');
+const logger = require('../utils/logger');
 dotenv.config();
-
-const requiredEnvVars = [
-  'MONGODB_URI',
-  'MONGODB_DB_NAME',
-  'REDIS_URI'
-];
 
 // Validation des variables d'environnement
 function validateEnv() {
-  // TODO: Implémenter la validation
-  // Si une variable manque, lever une erreur explicative
-  
+  logger.info('Validation des variables d\'environnement démarrée.');
+
   if (!process.env.PORT) {
-    throw new Error("La variable d'environnement 'PORT' doit être présente dans le fichier .env.");
+    const errorMessage = "La variable d'environnement 'PORT' doit être présente dans le fichier .env.";
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
   }
-  
+
   if (!process.env.MONGODB_URI) {
-    throw new Error("La variable d'environnement 'MONGODB_URI' doit être présente dans le fichier .env.");
+    const errorMessage = "La variable d'environnement 'MONGODB_URI' doit être présente dans le fichier .env.";
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
   }
-  
+
   if (!process.env.MONGODB_DB_NAME) {
-    throw new Error("La variable d'environnement 'MONGODB_DB_NAME' doit être présente dans le fichier .env.");
+    const errorMessage = "La variable d'environnement 'MONGODB_DB_NAME' doit être présente dans le fichier .env.";
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
   }
-  
+
   if (!process.env.REDIS_URI) {
-    throw new Error("La variable d'environnement 'REDIS_URI' doit être présente dans le fichier .env.");
+    const errorMessage = "La variable d'environnement 'REDIS_URI' doit être présente dans le fichier .env.";
+    logger.error(errorMessage);
+    throw new Error(errorMessage);
   }
-  
+
+  logger.info('Toutes les variables d\'environnement requises sont présentes.');
 }
 
 module.exports = {

@@ -1,7 +1,10 @@
-// Question: Comment organiser le point d'entrée de l'application ?
+// Question : Comment organiser le point d'entrée de l'application ?
+// Réponse : Centraliser la logique d'initialisation dans un fichier principal (ex. : index.js ou main.js ou app.js) 
+// pour charger les modules, configurer les dépendances et démarrer l'application.
 
-
-// Question: Quelle est la meilleure façon de gérer le démarrage de l'application ?
+// Question : Quelle est la meilleure façon de gérer le démarrage de l'application ?
+// Réponse : Utiliser une fonction dédiée pour gérer l'initialisation (ex. : async main() ou startApp()), 
+// en gérant les erreurs et en s'assurant que toutes les dépendances sont prêtes avant de lancer le processus principal.
 
 
 const express = require('express');
@@ -39,8 +42,8 @@ async function startServer() {
 // Gestion propre de l'arrêt
 process.on('SIGTERM', async () => {
   // TODO: Implémenter la fermeture propre des connexions
-  db.mongoClient.close();
-  db.redisClient.close();
+  db.closeMongoCon();
+  db.closeRedisCon();
 });
 
 

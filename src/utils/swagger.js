@@ -10,11 +10,11 @@ const swaggerOptions = {
         info: {
             title: 'API des cours',
             version: '1.0.0',
-            description: 'Documentation de l\'API des cours',
+            description: "Documentation de l\'API des cours et des étudiants",
         },
         servers: [
             {
-                url: `http://localhost:${config.port}/`,
+                url: `http://localhost:${config.port}`,
             },
         ],
     },

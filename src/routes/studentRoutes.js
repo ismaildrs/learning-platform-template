@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const studentController = require('../controllers/studentController');
 
+// Documentation Swagger
 /**
  * @swagger
  * /students/{id}:
  *   get:
  *     summary: Récupérer un étudiant par ID
+ *     tags:
+ *      - Étudiants
  *     description: Récupère un étudiant à partir de son ID unique.
  *     parameters:
  *       - in: path
@@ -43,6 +46,8 @@ router.get('/:id', studentController.getStudent);
  * /students:
  *   get:
  *     summary: Récupérer tous les étudiants
+ *     tags:
+ *      - Étudiants
  *     description: Récupère la liste de tous les étudiants.
  *     responses:
  *       200:
@@ -72,6 +77,8 @@ router.get('/', studentController.getStudents);
  * /students:
  *   post:
  *     summary: Créer un nouvel étudiant
+ *     tags:
+ *      - Étudiants
  *     description: Crée un étudiant avec les informations fournies.
  *     requestBody:
  *       required: true
@@ -99,6 +106,8 @@ router.post('/', studentController.createStudent);
  * /students/{id}:
  *   put:
  *     summary: Mettre à jour un étudiant
+ *     tags:
+ *      - Étudiants
  *     description: Met à jour un étudiant en fonction de son ID.
  *     parameters:
  *       - in: path
@@ -135,6 +144,8 @@ router.put('/:id', studentController.updateStudent);
  * /students/{id}:
  *   delete:
  *     summary: Supprimer un étudiant
+ *     tags:
+ *      - Étudiants
  *     description: Supprime un étudiant à partir de son ID.
  *     parameters:
  *       - in: path

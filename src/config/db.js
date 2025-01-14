@@ -12,6 +12,7 @@
 const { MongoClient } = require('mongodb');
 const redis = require('redis');
 const config = require('./env');
+const logger = require('../utils/logger');
 
 let mongoClient, redisClient, db;
 
@@ -21,14 +22,38 @@ async function connectMongo() {
   const maxRetries = 3;
   let nbRetries = 0;
 
+  logger.info('Attempting MongoDB connection', {
+    uri: config.mongodb.uri,
+    dbName: config.mongodb.dbName
+  });
+
   while(nbRetries<maxRetries){
     try{
       mongoClient = new MongoClient(config.mongodb.uri);
       await mongoClient.connect();
       db = mongoClient.db(config.mongodb.dbName);
+
+      logger.info('Successfully connected to MongoDB', {
+        attempt: nbRetries + 1,
+        dbName: config.mongodb.dbName
+      });
+
+      return {mongoClient, db};
     } catch(e){
       nbRetries++;
-      if(nbRetries>=maxRetries) throw new Error('Erreur lors de la connexion à MongoDB après plusieurs tentatives :', e.message);
+
+      logger.error('MongoDB connection attempt failed', {
+        attempt: nbRetries,
+        maxRetries,
+        error: error.message,
+        stack: error.stack,
+        timestamp: new Date()
+      });
+
+      if (nbRetries >= maxRetries) {
+        throw new Error('Erreur lors de la connexion à MongoDB après plusieurs tentatives : ' + error.message);
+      }
+    
       await new Promise(res => setTimeout(res, 2000)); // Attendre un peu avant de réessayer
     }
   } 
@@ -41,27 +66,79 @@ async function connectRedis() {
   let nbRetries = 0;
 
 
+  logger.info('Attempting Redis connection', {
+    uri: config.redis.uri,
+  });
+
   while(nbRetries<maxRetries){
     try{
       redisClient = redis.createClient({
-        url: config.redis.uri,
+        url: config.redis.uri
       });
 
-      redisClient = redis.createClient({ url: config.redis.uri });
-
       redisClient.on('connect', () => {
+        logger.info('Redis client connected');
       });
 
       redisClient.on('error', (err) => {
-        console.error('Error connecting to Redis:', err);
+        logger.error('Redis client error', {
+          error: err.message,
+          timestamp: new Date()
+        });
+      });
+
+      logger.info('Successfully connected to Redis', {
+        attempt: nbRetries + 1
       });
 
       await redisClient.connect();
+      return {redisClient};
     } catch(e){
       nbRetries++;
+
+      logger.error('Redis connection attempt failed', {
+        attempt: nbRetries,
+        maxRetries,
+        error: error.message,
+        stack: error.stack,
+        timestamp: new Date()
+      });
+
       if(nbRetries>= maxRetries) throw new Error('Erreur Redis :', e.message);
       await new Promise(res => setTimeout(res, 2000)); // Attendre un peu avant de réessayer
     }
+  }
+}
+
+function closeMongoCon(){
+  try{
+    if(mongoClient){
+      mongoClient.close();
+      logger.info('MongoDB connection closed successfully');
+    }
+  } catch(e){
+    logger.error('Error closing MongoDB connection', {
+      error: error.message,
+      stack: error.stack,
+      timestamp: new Date()
+    });
+    throw new Error("Erreur lors de la fermeture de la connection Mongo: "+e.message);
+  }
+}
+
+
+function closeRedisCon(){
+  try{
+    if(redisClient){
+      logger.info('Redis connection closed successfully');
+    }
+  } catch (error) {
+    logger.error('Error closing Redis connection', {
+      error: error.message,
+      stack: error.stack,
+      timestamp: new Date()
+    });
+    throw new Error("Erreur lors de la fermeture de la connection Mongo: "+e.message);
   }
 }
 
@@ -81,4 +158,6 @@ module.exports = {
   connectRedis,
   getRedisClient,
   getDb,
+  closeRedisCon,
+  closeMongoCon
 };
