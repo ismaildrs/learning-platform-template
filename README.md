@@ -121,9 +121,7 @@ http://localhost:3000/api-docs
 ![Interface Swagger](./screenshots/image.png)
 
 ### 3. **Docker**
-Docker est utilisé pour simplifier le déploiement et la gestion des dépendances. Un fichier `docker-compose.yml` est fourni pour lancer facilement les services nécessaires à l'application:
-   - **MongoDB** : Base de données pour stocker les informations.
-   - **Redis** : Utilisé pour le cache ou les files d’attente.
+Docker est utilisé pour simplifier le déploiement et la gestion des dépendances. Un fichier `docker-compose.yml` est fourni pour lancer facilement les services nécessaires à l'application.
 
 Pour démarrer les services :
 ```bash
@@ -145,8 +143,4 @@ Le logger Winston est configuré dans le fichier `logger.js` sous le dossier `ut
 
 ### 4. **Pourquoi choisir MongoDB ?**
 MongoDB est idéal pour ce projet grâce à sa flexibilité dans le stockage des données non structurées et son support natif pour les objets JSON.
-
----
-
-N'hésitez pas à poser des questions ou à suggérer des améliorations !
 
