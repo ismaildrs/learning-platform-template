@@ -1,0 +1,4 @@
+docker-compose.yml
+test/
+.env.example
+node-modules/
