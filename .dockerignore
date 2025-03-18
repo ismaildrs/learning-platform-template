@@ -2,3 +2,5 @@ docker-compose.yml
 test/
 .env.example
 node-modules/
+k8s/
+screenshots/

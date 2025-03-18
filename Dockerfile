@@ -1,15 +1,16 @@
-FROM node:alpine AS nodex
-
-WORKDIR /home/node
-
-RUN mkdir app/
-
-COPY . app/
+FROM node:alpine AS builder
 
 WORKDIR /home/node/app
 
+COPY . .
+
 RUN npm install
 
-ENV version=production
+ENV NODE_ENV=production
 
-USER 1000:1001
+ENV PORT=3000
+
+
+EXPOSE 3000
+
+CMD ["node", "src/app.js"]
