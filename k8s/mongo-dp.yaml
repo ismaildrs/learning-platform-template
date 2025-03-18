@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-dp 
+spec:
+  selector:
+    matchLabels:
+      app: mongo-pod 
+  replicas: 1
+  serviceName: mongodb-srv
+  template:
+    metadata:
+      labels: 
+        app: mongo-pod
+    spec:
+      containers:
+        - name: mongo 
+          image: mongo:latest
+          ports:
+          - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-vm
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-vm
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: local-path 
+      resources:
+        requests:
+          storage: 1Gi
+
+---          
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-srv
+spec:
+  selector:
+    app: mongo-pod
+  type: ClusterIP
+  ports:
+  - name: mongo
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
+#
+# ---
+#
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: pv0003
+# spec:
+#   capacity:
+#     storage: 1Gi
+#   volumeMode: Filesystem
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: slow
+#   mountOptions:
+#     - hostPath
+#
+# ---
+#
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: pvc0003
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   volumeMode: Filesystem
+#   resources:
+#     requests: 
+#       storage: 1Gi
+#   storageClassName: slow
+#       

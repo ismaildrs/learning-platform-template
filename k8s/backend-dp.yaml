@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-dp 
+spec:
+  selector:
+    matchLabels:
+      app: backend-pod 
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: backend-pod
+    spec:
+      containers:
+        - name: backend-pod
+          image: learningplatformbackend.azurecr.io/learning-platform:v4
+          env:
+          - name: MONGODB_URI
+            value: "mongodb://mongodb-srv.default.svc.cluster.local:27017/"
+          - name: REDIS_URI
+            value: "redis://redis-srv.default.svc.cluster.local:6379/"
+          - name: MONGODB_DB_NAME
+            value: "learning_platform"
+          - name: PORT 
+            value: "3000"
+          ports:
+          - containerPort: 3000
+          volumeMounts:
+            - name: vol
+              mountPath: /var/lib/nginx
+      imagePullSecrets:
+        - name: acr-auth
+      volumes:
+        - name: vol
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-srv
+spec:
+  selector:
+    app: backend-pod
+  type: NodePort
+  ports:
+  - name: backend-srv
+    protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30000

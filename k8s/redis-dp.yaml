@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-dp
+spec:
+  selector:
+    matchLabels:
+      app: redis-pod 
+  serviceName: redis-srv 
+  replicas: 1 
+  template:
+    metadata:
+      labels:
+        app: redis-pod
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: redis-pod
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-vm
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-vm
+    spec:
+      storageClassName: local-path 
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-srv
+spec:
+  selector:
+    app: redis-pod
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+---
+
