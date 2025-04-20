@@ -135,7 +135,7 @@ docker-compose up -d
 ### Application Orchestration using Kubernetes
 Here is the diagram show casing kubernetes objects used to run the app in the cluster:
 
-![App Diagram in k8s cluster](./screenshots/Untitled Diagram.drawio.png)
+![App Diagram in k8s cluster](./screenshots/k8s-diagram.png)
 
 ---
 
