@@ -132,6 +132,13 @@ docker-compose up -d
 
 ---
 
+### Application Orchestration using Kubernetes
+Here is the diagram show casing kubernetes objects used to run the app in the cluster:
+
+![App Diagram in k8s cluster](./screenshots/Untitled Diagram.drawio.png)
+
+---
+
 ## Réponses aux Questions
 
 ### 1. **Pourquoi utiliser Redis ?**
@@ -147,6 +154,4 @@ Le logger Winston est configuré dans le fichier `logger.js` sous le dossier `ut
 MongoDB est idéal pour ce projet grâce à sa flexibilité dans le stockage des données non structurées et son support natif pour les objets JSON.
 
 ---
-
-N'hésitez pas à poser des questions ou à suggérer des améliorations !
 
